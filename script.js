@@ -180,14 +180,37 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogoutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    // in each call print the remaining UI
+
+    labelTimer.textContent = `${min}:${sec}`;
+
+    // when 0 second, stop timer and logout user
+
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Login to get started';
+      containerApp.style.opacity = 0;
+    }
+    // decrese 1s
+    time--;
+  };
+
+  // set time to 5  min
+
+  let time = 200;
+
+  // call the timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+};
+
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
-
-// fake always logged in
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -224,6 +247,8 @@ btnLogin.addEventListener('click', function (e) {
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
+
+    startLogoutTimer();
 
     // Update UI
     updateUI(currentAccount);
@@ -263,14 +288,16 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    setTimeout(function(){// Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    // add loan date
-    currentAccount.movementsDates.push(new Date().toDateString());
+      // add loan date
+      currentAccount.movementsDates.push(new Date().toDateString());
 
-    // Update UI
-    updateUI(currentAccount);}, 2500)
+      // Update UI
+      updateUI(currentAccount);
+    }, 2500);
   }
   inputLoanAmount.value = '';
 });
@@ -383,8 +410,6 @@ btnSort.addEventListener('click', function (e) {
 // const days = calcDaysPassed(new Date(2024, 3, 14), new Date(2024, 3, 4));
 // console.log(days);
 
-
-
 // set timeouts
 
 // const ingridients = [' olives', ''];
@@ -401,8 +426,6 @@ btnSort.addEventListener('click', function (e) {
 //   console.log()
 // }, );
 
-
-
 // const liveClock = setInterval(function () {
 //   const date = new Date();
 //   const hour = date.getHours();
@@ -410,3 +433,11 @@ btnSort.addEventListener('click', function (e) {
 //   const sec = date.getSeconds();
 //   console.log(`${hour}:${min}:${sec}`);
 // } , 1000);
+
+// abbas prob
+
+const prizes = [10, 12, 15, 14, 10, 15, 9, 8, 15];
+const maxNum = Math.max(...prizes);
+
+const highValueArr = prizes.filter(e => e === maxNum);
+console.log(highValueArr.length);

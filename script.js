@@ -10,10 +10,10 @@
 // DIFFERENT DATA! Contains movement dates, currency and locale
 
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Nehal Shaikh',
   movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
   interestRate: 1.2, // %
-  pin: 1111,
+  pin: 2463,
 
   movementsDates: [
     '2024-11-18T21:31:17.178Z',
@@ -26,7 +26,7 @@ const account1 = {
     '2024-09-01T10:51:36.790Z',
   ],
   currency: 'EUR',
-  locale: 'pt-PT', // de-DE
+  locale: 'en-US', // de-DE
 };
 
 const account2 = {
@@ -80,7 +80,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 // Functions
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (24 * 60 * 60 * 1000));
 
@@ -91,10 +91,11 @@ const formatMovementDate = function (date) {
   if (daysPassed === 1) return 'Yesterday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
   else {
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth() + 1}`.padStart(2, 0);
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    // const day = `${date.getDate()}`.padStart(2, 0);
+    // const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    // const year = date.getFullYear();
+    // return `${day}/${month}/${year}`;
+    return Intl.DateTimeFormat(locale).format(date);
   }
 };
 
@@ -109,7 +110,12 @@ const displayMovements = function (acc, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const date = new Date(acc.movementsDates[i]);
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(date, acc.locale);
+
+    const formattedMov = new Intl.NumberFormat(acc.locale, {
+      style: 'currency',
+      currency: acc.currency,
+    }).format(mov);
 
     const html = `
       <div class="movements__row">
@@ -201,13 +207,19 @@ btnLogin.addEventListener('click', function (e) {
 
     // create current date
     const now = new Date();
-    const day = `${now.getDate()}`.padStart(2, 0);
-    const month = `${now.getMonth() + 1}`.padStart(2, 0);
-    const year = now.getFullYear();
-    const hour = `${now.getHours()}`.padStart(2, 0);
-    const min = `${now.getMinutes()}`.padStart(2, 0);
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+      // weekday: 'long',
+    };
 
-    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    labelDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
@@ -251,14 +263,14 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
+    setTimeout(function(){// Add movement
     currentAccount.movements.push(amount);
 
     // add loan date
     currentAccount.movementsDates.push(new Date().toDateString());
 
     // Update UI
-    updateUI(currentAccount);
+    updateUI(currentAccount);}, 2500)
   }
   inputLoanAmount.value = '';
 });
@@ -363,10 +375,38 @@ btnSort.addEventListener('click', function (e) {
 // console.log(Date.now())
 
 // operations with dates
-const future = new Date(2037, 10, 19, 15, 23);
-console.log(+future);
+// const future = new Date(2037, 10, 19, 15, 23);
+// console.log(+future);
 
-const calcDaysPassed = (date1, date2) =>
-  Math.abs(date2 - date1) / (24 * 60 * 60 * 1000);
-const days = calcDaysPassed(new Date(2024, 3, 14), new Date(2024, 3, 4));
-console.log(days);
+// const calcDaysPassed = (date1, date2) =>
+//   Math.abs(date2 - date1) / (24 * 60 * 60 * 1000);
+// const days = calcDaysPassed(new Date(2024, 3, 14), new Date(2024, 3, 4));
+// console.log(days);
+
+
+
+// set timeouts
+
+// const ingridients = [' olives', ''];
+// const pizzaTimer = setTimeout(
+//   (ing1, ing2) => console.log(`Here is your Pizza with ${ing1} and ${ing2}`),
+//   3000, ...ingridients
+// );
+// if (ingridients.includes('potato')) clearTimeout(pizzaTimer);
+
+// setInterval
+
+// setInterval(function () {
+//   const now = new Date();
+//   console.log()
+// }, );
+
+
+
+// const liveClock = setInterval(function () {
+//   const date = new Date();
+//   const hour = date.getHours();
+//   const min = date.getMinutes();
+//   const sec = date.getSeconds();
+//   console.log(`${hour}:${min}:${sec}`);
+// } , 1000);

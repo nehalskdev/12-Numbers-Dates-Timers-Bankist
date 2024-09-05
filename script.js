@@ -206,7 +206,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = +inputLoanAmount.value;
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
@@ -253,23 +253,35 @@ btnSort.addEventListener('click', function (e) {
 // LECTURES
 
 // Converting and checking Numbers
-console.log(23 === 23.0);
+// console.log(23 === 23.0);
 
-console.log(0.1 + 0.2 === 0.3);
+// console.log(0.1 + 0.2 === 0.3);
 
-console.log(+'46');
+// console.log(+'46');
 
-// Parsing
-console.log(Number.parseInt('30px', 10));
-console.log(parseInt('30.8px', 10)); // 30
+// // Parsing
+// console.log(Number.parseInt('30px', 10));
+// console.log(parseInt('30.8px', 10)); // 30
 
-console.log(parseFloat('30.8px', 10)); // 30.8
-// check if value is Nan
-console.log(Number.isNaN(45));
-console.log(Number.isNaN('25'));
-console.log(Number.isNaN(+'25px'));
-console.log(Number.isNaN(23 / 0));
+// console.log(parseFloat('30.8px', 10)); // 30.8
+// // check if value is Nan
+// console.log(Number.isNaN(45));
+// console.log(Number.isNaN('25'));
+// console.log(Number.isNaN(+'25px'));
+// console.log(Number.isNaN(23 / 0));
 
-console.log(25 === +'25');
-// checking value is a NUmber
-console.log(Number.isFinite(23 / 0));
+// console.log(25 === +'25');
+// // checking value is a NUmber
+// console.log(Number.isFinite(23 / 0));
+
+// Math and Rounding
+
+console.log(Math.sqrt(100));
+console.log(Math.round(23.6));
+
+console.log(Math.floor(23.1));
+console.log(Math.ceil(23.1))
+console.log(Math.trunc(23.2));
+
+// rounding decimals
+console.log((2.7).toFixed(5))

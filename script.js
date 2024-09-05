@@ -260,4 +260,16 @@ console.log(0.1 + 0.2 === 0.3);
 console.log(+'46');
 
 // Parsing
+console.log(Number.parseInt('30px', 10));
+console.log(parseInt('30.8px', 10)); // 30
 
+console.log(parseFloat('30.8px', 10)); // 30.8
+// check if value is Nan
+console.log(Number.isNaN(45));
+console.log(Number.isNaN('25'));
+console.log(Number.isNaN(+'25px'));
+console.log(Number.isNaN(23 / 0));
+
+console.log(25 === +'25');
+// checking value is a NUmber
+console.log(Number.isFinite(23 / 0));

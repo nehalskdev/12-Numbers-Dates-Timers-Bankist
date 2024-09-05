@@ -36,14 +36,14 @@ const account2 = {
   pin: 2222,
 
   movementsDates: [
-    '2019-11-01T13:15:33.035Z',
-    '2019-11-30T09:48:16.867Z',
-    '2019-12-25T06:04:23.907Z',
-    '2020-01-25T14:18:46.235Z',
-    '2020-02-05T16:33:06.386Z',
+    '2024-11-01T13:15:33.035Z',
+    '2024-11-30T09:48:16.867Z',
+    '2024-12-25T06:04:23.907Z',
+    '2024-01-25T14:18:46.235Z',
+    '2024-02-05T16:33:06.386Z',
     '2024-04-10T14:43:26.374Z',
     '2024-06-25T18:49:59.371Z',
-    '2024-07-26T12:01:20.894Z',
+    '2024-09-26T12:01:20.894Z',
   ],
   currency: 'USD',
   locale: 'en-US',
@@ -85,7 +85,7 @@ const formatMovementDate = function (date) {
     Math.round(Math.abs(date2 - date1) / (24 * 60 * 60 * 1000));
 
   const daysPassed = calcDaysPassed(new Date(), date);
-  console.log(daysPassed);
+  // console.log(daysPassed);
 
   if (daysPassed === 0) return 'Today';
   if (daysPassed === 1) return 'Yesterday';

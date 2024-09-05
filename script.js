@@ -16,14 +16,14 @@ const account1 = {
   pin: 1111,
 
   movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2024-11-18T21:31:17.178Z',
+    '2024-12-23T07:42:02.383Z',
+    '2024-01-28T09:15:04.904Z',
+    '2024-09-12T10:17:24.185Z',
+    '2024-09-12T14:11:59.604Z',
+    '2024-09-10T17:01:17.194Z',
+    '2024-09-05T23:36:17.929Z',
+    '2024-09-01T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -41,9 +41,9 @@ const account2 = {
     '2019-12-25T06:04:23.907Z',
     '2020-01-25T14:18:46.235Z',
     '2020-02-05T16:33:06.386Z',
-    '2020-04-10T14:43:26.374Z',
-    '2020-06-25T18:49:59.371Z',
-    '2020-07-26T12:01:20.894Z',
+    '2024-04-10T14:43:26.374Z',
+    '2024-06-25T18:49:59.371Z',
+    '2024-07-26T12:01:20.894Z',
   ],
   currency: 'USD',
   locale: 'en-US',
@@ -81,17 +81,22 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 const formatMovementDate = function (date) {
-
   const calcDaysPassed = (date1, date2) =>
-    Math.abs(date2 - date1) / (24 * 60 * 60 * 1000);
-  
-  const day = `${date.getDate()}`.padStart(2, 0);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0);
-  const year = date.getFullYear();
-   return `${day}/${month}/${year}`;
+    Math.round(Math.abs(date2 - date1) / (24 * 60 * 60 * 1000));
 
-  
-}
+  const daysPassed = calcDaysPassed(new Date(), date);
+  console.log(daysPassed);
+
+  if (daysPassed === 0) return 'Today';
+  if (daysPassed === 1) return 'Yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+  else {
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+};
 
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
@@ -102,7 +107,7 @@ const displayMovements = function (acc, sort = false) {
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
-  
+
     const date = new Date(acc.movementsDates[i]);
     const displayDate = formatMovementDate(date);
 
@@ -201,12 +206,12 @@ btnLogin.addEventListener('click', function (e) {
     const year = now.getFullYear();
     const hour = `${now.getHours()}`.padStart(2, 0);
     const min = `${now.getMinutes()}`.padStart(2, 0);
-   
-    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`; 
+
+    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
-    inputLoginPin.blur();  
+    inputLoginPin.blur();
 
     // Update UI
     updateUI(currentAccount);
@@ -363,5 +368,5 @@ console.log(+future);
 
 const calcDaysPassed = (date1, date2) =>
   Math.abs(date2 - date1) / (24 * 60 * 60 * 1000);
-const days = calcDaysPassed((new Date(2024, 3, 14)), (new Date(2024, 3, 4)));
-console.log(days );
+const days = calcDaysPassed(new Date(2024, 3, 14), new Date(2024, 3, 4));
+console.log(days);

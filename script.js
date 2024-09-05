@@ -81,19 +81,27 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
+    const date = new Date(acc.movementsDates[i]);
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+    const displayDate = `${day}/${month}/${year}`;
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
+    <div class="movements__date">${displayDate}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -142,7 +150,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   // Display balance
   calcDisplayBalance(acc);
@@ -154,6 +162,11 @@ const updateUI = function (acc) {
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
+
+// fake always logged in
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -171,9 +184,19 @@ btnLogin.addEventListener('click', function (e) {
     }`;
     containerApp.style.opacity = 100;
 
+    // create current date
+    const now = new Date();
+    const day = `${now.getDate()}`.padStart(2, 0);
+    const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    const year = now.getFullYear();
+    const hour = `${now.getHours()}`.padStart(2, 0);
+    const min = `${now.getMinutes()}`.padStart(2, 0);
+   
+    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`; 
+
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
-    inputLoginPin.blur();
+    inputLoginPin.blur();  
 
     // Update UI
     updateUI(currentAccount);
@@ -198,6 +221,10 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
 
+    // add transfer date
+    currentAccount.movementsDates.push(new Date().toDateString());
+    receiverAcc.movementsDates.push(new Date().toDateString());
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -211,6 +238,9 @@ btnLoan.addEventListener('click', function (e) {
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
     currentAccount.movements.push(amount);
+
+    // add loan date
+    currentAccount.movementsDates.push(new Date().toDateString());
 
     // Update UI
     updateUI(currentAccount);
@@ -244,7 +274,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(acc, !sorted);
   sorted = !sorted;
 });
 
@@ -276,12 +306,43 @@ btnSort.addEventListener('click', function (e) {
 
 // Math and Rounding
 
-console.log(Math.sqrt(100));
-console.log(Math.round(23.6));
+// console.log(Math.sqrt(100));
+// console.log(Math.round(23.6));
 
-console.log(Math.floor(23.1));
-console.log(Math.ceil(23.1));
-console.log(Math.trunc(23.2));
+// console.log(Math.floor(23.1));
+// console.log(Math.ceil(23.1));
+// console.log(Math.trunc(23.2));
 
-// rounding decimals
-console.log((2.7).toFixed(5));
+// // rounding decimals
+// console.log((2.7).toFixed(5));
+
+// reminder operator
+// console.log(Math.max(1, 2, 4));
+
+// bigInt
+
+// console.log(481111696621226529592n);
+
+// creating DATES
+
+// const timeNow = new Date();
+// console.log(timeNow);
+
+// console.log(new Date('December 25 2005'));
+// console.log(new Date(account1.movementsDates[0]));
+// console.log(new Date(2024, 5, 21, 9, 30, 25));
+// console.log(new Date(0));
+
+// working with dates
+
+// const future = new Date(2037, 10, 19, 15, 23);
+// console.log(future);
+// console.log(future.getFullYear());
+// console.log(future.getMonth()) // it is0 based in js
+// console.log(future.getDate());
+// console.log(future.getDay());
+// console.log(future.getHours());
+// console.log(future.getMinutes());
+// console.log(future.getMilliseconds());
+// console.log(future.toISOString());
+// console.log(Date.now())
